@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="infraestrutura/infraestrutura.csproj" />
+  <Project Path="softline.API/softline.API.csproj" />
+</Solution>
