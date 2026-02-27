@@ -9,6 +9,10 @@ namespace infraestrutura
         private IConfiguration _configuration;
 
         public DbSet<User> User { get; set; }
+        public DbSet<Client> Client { get; set; }
+        public DbSet<Product> Product { get; set; }
+
+
 
         public APIDbContext(IConfiguration configuration, DbContextOptions options) : base(options)
         {

@@ -1,16 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace domain.entidades
+namespace softline.API.DTOs
 {
-    [Table("users")]
-    public class User
+    public class CreateUserDTO
     {
-        [Key]
-        [Column("user_id")]
-        public int Id { get; set; }
-
-
         [Column("user_name")]
         [MaxLength(20, ErrorMessage = "O nome de usuário deve conter no máximo 20 caracteres!")]
         [Required(ErrorMessage = "É obrigatório informar o nome do usuário!!")]

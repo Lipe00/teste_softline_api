@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace domain.entidades
+namespace softline.API.DTOs
 {
-    [Table("clients")]
-    public class Client
+    public class CreateClientDTO
     {
-        [Key]
-        [Column("client_id")]
-        public int Id { get; set;  }
-
-
         [Column("client_name")]
         [Required(ErrorMessage = "É obrigatório informar o nome do cliente!")]
         public string Name { get; set; }
