@@ -25,14 +25,23 @@ namespace softline.API.Controllers
         [HttpPost]
         public IActionResult Add(CreateUserDTO dto)
         {
+            if (_db.User.Any(x => x.Name == dto.Name))
+                return BadRequest("Usuário já existe");
+
             var user = new User
             {
                 Name = dto.Name,
-                Password = dto.Password
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
             };
-            var users = _db.User.Add(user);
+
+            _db.User.Add(user);
             _db.SaveChanges();
-            return Ok(users.Entity);
+
+            return Ok(new
+            {
+                user.Id,
+                user.Name
+            });
         }
         [HttpGet("{id}")]
         public IActionResult GetById(int id)

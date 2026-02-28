@@ -13,7 +13,7 @@ namespace softline.API.Services
                 var key = Encoding.ASCII.GetBytes(Key.secret);
                 var tokenConfig = new SecurityTokenDescriptor
                 {
-                    Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]
+                    Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("userId", user.Id.ToString()),
                     }),

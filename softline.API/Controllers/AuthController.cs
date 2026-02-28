@@ -1,5 +1,7 @@
 ﻿using domain.entidades;
+using infraestrutura;
 using Microsoft.AspNetCore.Mvc;
+using softline.API.DTOs;
 using softline.API.Services;
 
 namespace softline.API.Controllers
@@ -8,15 +10,29 @@ namespace softline.API.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult Auth(string username, string password)
+        private readonly APIDbContext _db;
+
+        public AuthController(APIDbContext db, TokenService tokenService)
         {
-            if(username == "teste" && password == "teste123")
-            {
-                var token = TokenService.GenerateToken(new User());
-                return Ok(token);
-            }
-            return BadRequest("Nome de usuário ou senha incorretos");
+            _db = db;
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login(LoginDTO dto)
+        {
+            var user = _db.User.FirstOrDefault(x => x.Name == dto.Name);
+
+            if (user == null)
+                return Unauthorized("Usuário ou senha inválidos");
+
+            var senhaValida = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
+
+            if (!senhaValida)
+                return Unauthorized("Usuário ou senha inválidos");
+
+            var token = TokenService.GenerateToken(user);
+
+            return Ok(token);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using softline.API.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +49,7 @@ builder.Services.AddSwaggerGen(s =>
 
 
 builder.Services.AddDbContext<APIDbContext>();
+builder.Services.AddScoped<TokenService>();
 
 var key = Encoding.ASCII.GetBytes(softline.API.Key.secret);
 builder.Services.AddAuthentication(x =>
