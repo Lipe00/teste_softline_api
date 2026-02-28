@@ -1,10 +1,12 @@
 ﻿using domain.entidades;
 using infraestrutura;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using softline.API.DTOs;
 
 namespace softline.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ProductController : ControllerBase
@@ -18,9 +20,20 @@ namespace softline.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var products = _db.Product.ToList();
+            var products = _db.Product
+                .Select(p => new ResponseProductDTO
+                {
+                    Id = p.Id,
+                    Code = p.Code,
+                    Description = p.Description,
+                    BarCode = p.BarCode,
+                    Price = p.Price,
+                    GrossWeight = p.GrossWeight,
+                    NetWeight = p.NetWeight
+                }).ToList();
             return Ok(products);
         }
+        [Authorize]
         [HttpPost]
         public IActionResult Add(CreateProductDTO dto)
         {
@@ -34,11 +47,23 @@ namespace softline.API.Controllers
                 NetWeight = dto.NetWeight
             };
 
-            var products = _db.Product.Add(product);
+            _db.Product.Add(product);
             _db.SaveChanges();
 
-            return Ok(products);
+            var result = new ResponseProductDTO
+            {
+                Id = product.Id,
+                Code = product.Code,
+                Description = product.Description,
+                BarCode = product.BarCode,
+                Price = product.Price,
+                GrossWeight = product.GrossWeight,
+                NetWeight = product.NetWeight
+            };
+
+            return Ok(result);
         }
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -47,9 +72,21 @@ namespace softline.API.Controllers
             if (product == null)
                 return NotFound();
 
-            return Ok(product);
+            var result = new ResponseProductDTO
+            {
+                Id = product.Id,
+                Code = product.Code,
+                Description = product.Description,
+                BarCode = product.BarCode,
+                Price = product.Price,
+                GrossWeight = product.GrossWeight,
+                NetWeight = product.NetWeight
+            };
+
+            return Ok(result); ;
         }
-            [HttpPut("{id}")]
+        [Authorize]
+        [HttpPut("{id}")]
             public IActionResult Update(int id, UpdateProductDTO dto)
             {
                 var product = _db.Product.Find(id);
@@ -77,8 +114,20 @@ namespace softline.API.Controllers
 
                 _db.SaveChanges();
 
-                return Ok(product);
+                var result = new ResponseProductDTO
+                {
+                    Id = product.Id,
+                    Code = product.Code,
+                    Description = product.Description,
+                    BarCode = product.BarCode,
+                    Price = product.Price,
+                    GrossWeight = product.GrossWeight,
+                    NetWeight = product.NetWeight
+                };
+
+                return Ok(result);
             }
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
