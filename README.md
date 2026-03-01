@@ -58,15 +58,21 @@ O frontend foi desenvolvido separadamente com HTML, JS, jQuery e Bootstrap e se 
 
 ## Primeira Autenticação (FirstAuth)
 Antes de usar qualquer rota protegida:
+
 Abra /User/FirstAuth no Swagger.
+
 Crie o primeiro usuário.
-# Só será permitido se nenhum usuário existir no banco.
+
+># Só será permitido se nenhum usuário existir no banco.
+
 Depois, vá em /auth/login, informe usuário e senha e receba o token JWT.
+
 Clique em “Authorize” no Swagger e insira:
+
 ```plaintext
   Bearer <SEU_TOKEN>
 ```
-| Agora todas as rotas protegidas estarão acessíveis.
+> Agora todas as rotas protegidas estarão acessíveis.
 
 ## Frontend
 O frontend está localizado nesse [repositório](https://github.com/Lipe00/teste_softline_front)
