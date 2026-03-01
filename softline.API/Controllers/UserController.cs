@@ -1,5 +1,6 @@
 ﻿using domain.entidades;
 using infraestrutura;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
 using softline.API.DTOs;
@@ -16,12 +17,16 @@ namespace softline.API.Controllers
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
+
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
             var users = _db.User.ToList();
             return Ok(users);
         }
+
+        [Authorize]
         [HttpPost]
         public IActionResult Add(CreateUserDTO dto)
         {
@@ -43,6 +48,8 @@ namespace softline.API.Controllers
                 user.Name
             });
         }
+
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -53,6 +60,8 @@ namespace softline.API.Controllers
 
             return Ok(user);
         }
+
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Update(int id, UpdateUserDTO dto)
         {
@@ -71,6 +80,8 @@ namespace softline.API.Controllers
 
             return Ok(user);
         }
+
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

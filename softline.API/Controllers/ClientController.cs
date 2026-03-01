@@ -1,6 +1,7 @@
 ﻿
 using domain.entidades;
 using infraestrutura;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using softline.API.DTOs;
 
@@ -16,12 +17,16 @@ namespace softline.API.Controllers
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
+
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
             var clients = _db.Client.ToList();
             return Ok(clients);
         }
+
+        [Authorize]
         [HttpPost]
         public IActionResult Add(CreateClientDTO dto)
         {
@@ -36,6 +41,8 @@ namespace softline.API.Controllers
             _db.SaveChanges();
             return Ok(clients.Entity);
         }
+
+        [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -47,6 +54,7 @@ namespace softline.API.Controllers
             return Ok(client);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Update(int id, UpdateClientDTO dto)
         {
@@ -70,6 +78,8 @@ namespace softline.API.Controllers
             _db.SaveChanges();
             return Ok(client);
         }
+
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

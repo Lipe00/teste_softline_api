@@ -17,6 +17,8 @@ namespace softline.API.Controllers
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
+
+        [Authorize]
         [HttpGet]
         public IActionResult Get()
         {
@@ -33,6 +35,7 @@ namespace softline.API.Controllers
                 }).ToList();
             return Ok(products);
         }
+
         [Authorize]
         [HttpPost]
         public IActionResult Add(CreateProductDTO dto)
@@ -63,6 +66,7 @@ namespace softline.API.Controllers
 
             return Ok(result);
         }
+
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
@@ -85,48 +89,50 @@ namespace softline.API.Controllers
 
             return Ok(result); ;
         }
+
         [Authorize]
         [HttpPut("{id}")]
-            public IActionResult Update(int id, UpdateProductDTO dto)
+        public IActionResult Update(int id, UpdateProductDTO dto)
+        {
+            var product = _db.Product.Find(id);
+
+            if (product == null)
+                return NotFound();
+
+            if (dto.Code.HasValue)
+                product.Code = dto.Code.Value;
+
+            if (dto.Description != null)
+                product.Description = dto.Description;
+
+            if (dto.BarCode != null)
+                product.BarCode = dto.BarCode;
+
+            if (dto.Price.HasValue)
+                product.Price = dto.Price.Value;
+
+            if (dto.GrossWeight.HasValue)
+                product.GrossWeight = dto.GrossWeight.Value;
+
+            if (dto.NetWeight.HasValue)
+                product.NetWeight = dto.NetWeight.Value;
+
+            _db.SaveChanges();
+
+            var result = new ResponseProductDTO
             {
-                var product = _db.Product.Find(id);
+                Id = product.Id,
+                Code = product.Code,
+                Description = product.Description,
+                BarCode = product.BarCode,
+                Price = product.Price,
+                GrossWeight = product.GrossWeight,
+                NetWeight = product.NetWeight
+            };
 
-                if (product == null)
-                    return NotFound();
+            return Ok(result);
+        }
 
-                if (dto.Code.HasValue)
-                    product.Code = dto.Code.Value;
-
-                if (dto.Description != null)
-                    product.Description = dto.Description;
-
-                if (dto.BarCode != null)
-                    product.BarCode = dto.BarCode;
-
-                if (dto.Price.HasValue)
-                    product.Price = dto.Price.Value;
-
-                if (dto.GrossWeight.HasValue)
-                    product.GrossWeight = dto.GrossWeight.Value;
-
-                if (dto.NetWeight.HasValue)
-                    product.NetWeight = dto.NetWeight.Value;
-
-                _db.SaveChanges();
-
-                var result = new ResponseProductDTO
-                {
-                    Id = product.Id,
-                    Code = product.Code,
-                    Description = product.Description,
-                    BarCode = product.BarCode,
-                    Price = product.Price,
-                    GrossWeight = product.GrossWeight,
-                    NetWeight = product.NetWeight
-                };
-
-                return Ok(result);
-            }
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
