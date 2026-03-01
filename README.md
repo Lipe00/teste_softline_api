@@ -8,7 +8,7 @@ O frontend foi desenvolvido separadamente com HTML, JS, jQuery e Bootstrap e se 
   - CRUD de Clientes (/Client)
   - CRUD de Produtos (/Product)
   - CRUD de Usuários (/User)
-  || ⚠️ A API exige autenticação JWT. Antes de qualquer operação, é necessário criar o primeiro usuário.
+  >⚠️ A API exige autenticação JWT. Antes de qualquer operação, é necessário criar o primeiro usuário.
 
 ## Tecnologias Utilizadas
   - .NET 8
@@ -33,8 +33,10 @@ O frontend foi desenvolvido separadamente com HTML, JS, jQuery e Bootstrap e se 
     └── softline.API.http    # Arquivo para testes de requisições HTTP (ex: via REST Client)
 ```
 ## Como Executar
-  |Não é necessário criar o banco manualmente. As migrations da API criam as tabelas automaticamente.
+>Não é necessário criar o banco manualmente. As migrations da API criam as tabelas automaticamente.
+
 1- Certifique-se de ter .NET 8 SDK e MySQL instalados.
+
 2- Configure a connection string no appsettings.json:
 ```json
 {
@@ -44,10 +46,12 @@ O frontend foi desenvolvido separadamente com HTML, JS, jQuery e Bootstrap e se 
 }
 ```
 3- Execute a api
+
 ```bash
   dotnet run
 ```
 4- A aplicação vai abrir o swagger em:
+
 ```plaintext
   https://localhost:7138/swagger
 ```
