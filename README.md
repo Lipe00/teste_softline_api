@@ -3,18 +3,18 @@ Este projeto é um desafio técnico da SoftLine, focado no desenvolvimento de um
 O frontend foi desenvolvido separadamente com HTML, JS, jQuery e Bootstrap e se comunica com esta API via HTTP.
 
 ## Funcionalidades
-  Criar o primeiro usuário (/User/FirstAuth)
-  Login com autenticação JWT (/auth/login)
-  CRUD de Clientes (/Client)
-  CRUD de Produtos (/Product)
-  CRUD de Usuários (/User)
+  - Criar o primeiro usuário (/User/FirstAuth)
+  - Login com autenticação JWT (/auth/login)
+  - CRUD de Clientes (/Client)
+  - CRUD de Produtos (/Product)
+  - CRUD de Usuários (/User)
   || ⚠️ A API exige autenticação JWT. Antes de qualquer operação, é necessário criar o primeiro usuário.
 
 ## Tecnologias Utilizadas
-  .NET 8
-  MySQL
-  JWT para autenticação
-  HTML, JS, jQuery e Bootstrap no frontend (repositório separado)
+  - .NET 8
+  - MySQL
+  - JWT para autenticação
+  - HTML, JS, jQuery e Bootstrap no frontend (repositório separado)
 
 ## Estrutura de Pastas
   ```plaintext
