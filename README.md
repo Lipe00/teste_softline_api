@@ -63,7 +63,7 @@ Abra /User/FirstAuth no Swagger.
 
 Crie o primeiro usuário.
 
-># Só será permitido se nenhum usuário existir no banco.
+> Só será permitido se nenhum usuário existir no banco.
 
 Depois, vá em /auth/login, informe usuário e senha e receba o token JWT.
 
