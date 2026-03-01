@@ -18,12 +18,70 @@ namespace softline.API.Controllers
             _db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
+        [HttpPost("firstAuth")]
+        public IActionResult FirstAuth(CreateUserDTO dto)
+        {
+            if (_db.User.Any())
+                return BadRequest("O primeiro usuário já foi criado");
+
+            var user = new User
+            {
+                Name = dto.Name,
+                Password = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            };
+
+            _db.User.Add(user);
+            _db.SaveChanges();
+
+            return Ok(new
+            {
+                user.Id,
+                user.Name
+            });
+        }
+
         [Authorize]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
-            var users = _db.User.ToList();
+            var users = _db.User.Select(u => new ResponseUserDTO
+            {
+                Id = u.Id,
+                Name = u.Name
+            }).ToList();
             return Ok(users);
+        }
+
+        [Authorize]
+        [HttpGet("paged")]
+        public IActionResult GetPaged([FromQuery] int? page, [FromQuery] int? pageSize)
+        {
+            var query = _db.User
+                .OrderBy(u => u.Id)
+                .Select(u => new ResponseUserDTO
+            {
+                Id = u.Id,
+                Name = u.Name
+            }).ToList();
+            if (page.HasValue && pageSize.HasValue)
+            {
+                var totalItems = query.Count();
+
+                var users = query
+                                .Skip((page.Value - 1) * pageSize.Value)
+                                .Take(pageSize.Value)
+                                .ToList();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize.Value);
+
+                return Ok(new
+                {
+                    data = users,
+                    totalItems,
+                    totalPages
+                });
+            }
+
+            return Ok(query.ToList());
         }
 
         [Authorize]

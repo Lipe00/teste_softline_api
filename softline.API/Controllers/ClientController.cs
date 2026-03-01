@@ -20,10 +20,54 @@ namespace softline.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
-            var clients = _db.Client.ToList();
+            var clients = _db.Client
+                .Select(c => new ResponseClientDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Fantasy_name = c.Fantasy_name,
+                    Document = c.Document,
+                    Address = c.Address
+                }).ToList();
             return Ok(clients);
+        }
+
+        [Authorize]
+        [HttpGet("paged")]
+        public IActionResult GetPaged([FromQuery] int? page, [FromQuery] int? pageSize)
+        {
+            var query = _db.Client
+                .OrderBy(c => c.Id)
+                .Select(c => new ResponseClientDTO
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Fantasy_name = c.Fantasy_name,
+                    Document = c.Document,
+                    Address = c.Address
+                }).ToList();
+
+            if(page.HasValue && pageSize.HasValue)
+            {
+                var totalItems = query.Count();
+
+                var clients = query
+                                .Skip((page.Value - 1) * pageSize.Value)
+                                .Take(pageSize.Value)
+                                .ToList();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize.Value);
+
+                return Ok(new
+                {
+                    data = clients,
+                    totalItems,
+                    totalPages
+                });
+            }
+
+            return Ok(query.ToList());
         }
 
         [Authorize]

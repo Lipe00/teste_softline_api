@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
         policy => policy
-            .AllowAnyOrigin()   // ou use .WithOrigins("https://meusite.com")
+            .AllowAnyOrigin()   
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
@@ -86,6 +86,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

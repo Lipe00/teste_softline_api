@@ -20,7 +20,7 @@ namespace softline.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             var products = _db.Product
                 .Select(p => new ResponseProductDTO
@@ -34,6 +34,45 @@ namespace softline.API.Controllers
                     NetWeight = p.NetWeight
                 }).ToList();
             return Ok(products);
+        }
+
+        [Authorize]
+        [HttpGet("paged")]
+        public IActionResult GetPaged([FromQuery] int? page, [FromQuery] int? pageSize)
+        {
+            var query = _db.Product
+                .OrderBy(p => p.Id)
+                .Select(p => new ResponseProductDTO
+                {
+                    Id = p.Id,
+                    Code = p.Code,
+                    Description = p.Description,
+                    BarCode = p.BarCode,
+                    Price = p.Price,
+                    GrossWeight = p.GrossWeight,
+                    NetWeight = p.NetWeight
+                });
+
+            if (page.HasValue && pageSize.HasValue)
+            {
+                var totalItems = query.Count();
+
+                var products = query
+                                .Skip((page.Value - 1) * pageSize.Value)
+                                .Take(pageSize.Value)
+                                .ToList();
+
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize.Value);
+
+                return Ok(new
+                {
+                    data = products,
+                    totalItems,
+                    totalPages
+                });
+            }
+
+            return Ok(query.ToList());
         }
 
         [Authorize]

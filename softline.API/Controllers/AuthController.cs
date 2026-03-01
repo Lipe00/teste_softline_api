@@ -1,5 +1,6 @@
 ﻿using domain.entidades;
 using infraestrutura;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using softline.API.DTOs;
 using softline.API.Services;
@@ -17,6 +18,7 @@ namespace softline.API.Controllers
             _db = db;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login(LoginDTO dto)
         {
@@ -33,6 +35,13 @@ namespace softline.API.Controllers
             var token = TokenService.GenerateToken(user);
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            return Ok("Você está autenticado");
         }
     }
 }
